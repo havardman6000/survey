@@ -23,17 +23,37 @@ const DailyGoalPage = () => {
 
   const handleContinue = async () => {
     if (surveyData.dailyGoal) {
-      const response = await fetch('/api/submit-survey', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(surveyData),
-      });
+      // Log the survey data being submitted
+      console.log('Submitting survey data:', surveyData);
 
-      if (response.ok) {
-        // Proceed to the next page or show a success message
-      } else {
+      // Prepare the data to match the expected structure
+      const formData = [
+        surveyData.language,
+        surveyData.referralSource,
+        surveyData.languageLevel,
+        surveyData.motivation,
+        surveyData.dailyGoal
+      ];
+
+      try {
+        const response = await fetch('/api/submit-survey', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData), // Send the formData array
+        });
+
+        if (response.ok) {
+          console.log('Survey data submitted successfully');
+          // Proceed to the next page or show a success message
+        } else {
+          const errorData = await response.json();
+          console.error('Failed to submit survey data:', errorData);
+          // Handle error
+        }
+      } catch (error) {
+        console.error('Error submitting survey data:', error);
         // Handle error
       }
     }

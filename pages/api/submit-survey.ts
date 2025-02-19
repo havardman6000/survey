@@ -17,10 +17,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (response.ok) {
         res.status(200).json({ message: 'Survey data received successfully' });
       } else {
-        res.status(500).json({ message: 'Failed to submit survey data' });
+        const errorText = await response.text();
+        res.status(500).json({ message: 'Failed to submit survey data', error: errorText });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Error submitting survey data', error });
+      console.error('Error submitting survey data:', error);
+      res.status(500).json({ message: 'Error submitting survey data', error: (error as Error).message });
     }
   } else {
     res.status(405).json({ message: 'Method not allowed' });
