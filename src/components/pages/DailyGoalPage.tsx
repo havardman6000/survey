@@ -1,9 +1,14 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import ContinueButton from '../ContinueButton';
 import SurveyLayout from '../SurveyLayout';
+import { useSurvey } from '@/context/SurveyContext';
 
 const DailyGoalPage = () => {
+  const { surveyData, updateSurveyData } = useSurvey();
+
   const timeOptions = [
     '5 MIN/DAY',
     '10 MIN/DAY',
@@ -11,6 +16,28 @@ const DailyGoalPage = () => {
     '20 MIN/DAY',
     '30 MIN/DAY'
   ];
+
+  const handleTimeSelect = (time: string) => {
+    updateSurveyData({ dailyGoal: time });
+  };
+
+  const handleContinue = async () => {
+    if (surveyData.dailyGoal) {
+      const response = await fetch('/api/submit-survey', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(surveyData),
+      });
+
+      if (response.ok) {
+        // Proceed to the next page or show a success message
+      } else {
+        // Handle error
+      }
+    }
+  };
 
   return (
     <SurveyLayout showBackButton showProgressBar currentStep={5}>
@@ -35,7 +62,12 @@ const DailyGoalPage = () => {
             {timeOptions.map((option) => (
               <button
                 key={option}
-                className="w-full h-[38px] md:h-[48px] border-2 border-[#00C853] rounded-[5px] text-[#00C853] font-league-spartan text-sm md:text-lg hover:bg-[#00C853] hover:text-white transition-colors px-2"
+                className={`w-full h-[38px] md:h-[48px] border-2 rounded-[5px] text-sm md:text-lg transition-colors px-2 ${
+                  surveyData.dailyGoal === option
+                    ? 'bg-[#00C853] text-white border-[#00C853]'
+                    : 'border-[#00C853] text-[#00C853] hover:bg-[#00C853] hover:text-white'
+                }`}
+                onClick={() => handleTimeSelect(option)}
               >
                 {option}
               </button>
@@ -46,10 +78,10 @@ const DailyGoalPage = () => {
 
       {/* Continue Button Container */}
       <div className="w-full px-4 md:px-[40px] mt-3 md:mt-6 mb-4 md:mb-10">
-        <ContinueButton onClick={() => {}}nextPage='/success' />
+        <ContinueButton onClick={handleContinue} nextPage='/success' disabled={!surveyData.dailyGoal} />
       </div>
     </SurveyLayout>
   );
 };
 
-export default DailyGoalPage; 
+export default DailyGoalPage;

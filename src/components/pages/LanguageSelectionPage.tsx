@@ -1,9 +1,14 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import ContinueButton from '../ContinueButton';
 import SurveyLayout from '../SurveyLayout';
+import { useSurvey } from '@/context/SurveyContext';
 
 const LanguageSelectionPage = () => {
+  const { surveyData, updateSurveyData } = useSurvey();
+
   const languages = [
     'CHINESE',
     'KOREAN',
@@ -12,6 +17,10 @@ const LanguageSelectionPage = () => {
     'FRENCH',
     'GERMAN'
   ];
+
+  const handleLanguageSelect = (language: string) => {
+    updateSurveyData({ language });
+  };
 
   return (
     <SurveyLayout showBackButton showProgressBar currentStep={1}>
@@ -36,7 +45,12 @@ const LanguageSelectionPage = () => {
             {languages.map((language) => (
               <button
                 key={language}
-                className="w-full h-[38px] md:h-[48px] border-2 border-[#00C853] rounded-[5px] text-[#00C853] font-league-spartan text-sm md:text-lg hover:bg-[#00C853] hover:text-white transition-colors px-2"
+                className={`w-full h-[38px] md:h-[48px] border-2 rounded-[5px] text-sm md:text-lg transition-colors px-2 ${
+                  surveyData.language === language
+                    ? 'bg-[#00C853] text-white border-[#00C853]'
+                    : 'border-[#00C853] text-[#00C853] hover:bg-[#00C853] hover:text-white'
+                }`}
+                onClick={() => handleLanguageSelect(language)}
               >
                 {language}
               </button>
@@ -47,7 +61,7 @@ const LanguageSelectionPage = () => {
 
       {/* Continue Button Container */}
       <div className="w-full px-4 md:px-[40px] mt-3 md:mt-auto mb-4 md:mb-8">
-        <ContinueButton onClick={() => {}} nextPage="/referral" />
+        <ContinueButton onClick={() => {}} nextPage="/referral" disabled={!surveyData.language} />
       </div>
     </SurveyLayout>
   );

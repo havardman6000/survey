@@ -1,9 +1,14 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import ContinueButton from '../ContinueButton';
 import SurveyLayout from '../SurveyLayout';
+import { useSurvey } from '@/context/SurveyContext';
 
 const LanguageLevelPage = () => {
+  const { surveyData, updateSurveyData } = useSurvey();
+
   const levels = [
     "I'M NEW TO IT",
     'I KNOW SOME COMMON WORDS',
@@ -11,6 +16,10 @@ const LanguageLevelPage = () => {
     'I CAN TALK ABOUT VARIOUS TOPICS',
     'I CAN DISCUSS MOST TOPICS IN DETAIL'
   ];
+
+  const handleLevelSelect = (level: string) => {
+    updateSurveyData({ languageLevel: level });
+  };
 
   return (
     <SurveyLayout showBackButton showProgressBar currentStep={3}>
@@ -35,7 +44,12 @@ const LanguageLevelPage = () => {
             {levels.map((level) => (
               <button
                 key={level}
-                className="w-full h-[38px] md:h-[48px] border-2 border-[#00C853] rounded-[5px] text-[#00C853] font-league-spartan text-sm md:text-lg hover:bg-[#00C853] hover:text-white transition-colors px-2"
+                className={`w-full h-[38px] md:h-[48px] border-2 rounded-[5px] text-sm md:text-lg transition-colors px-2 ${
+                  surveyData.languageLevel === level
+                    ? 'bg-[#00C853] text-white border-[#00C853]'
+                    : 'border-[#00C853] text-[#00C853] hover:bg-[#00C853] hover:text-white'
+                }`}
+                onClick={() => handleLevelSelect(level)}
               >
                 {level}
               </button>
@@ -46,10 +60,10 @@ const LanguageLevelPage = () => {
 
       {/* Continue Button Container */}
       <div className="w-full px-4 md:px-[40px] mt-3 md:mt-auto mb-4 md:mb-8">
-        <ContinueButton onClick={() => {}}nextPage="/motivation" />
+        <ContinueButton onClick={() => {}} nextPage="/motivation" disabled={!surveyData.languageLevel} />
       </div>
     </SurveyLayout>
   );
 };
 
-export default LanguageLevelPage; 
+export default LanguageLevelPage;
