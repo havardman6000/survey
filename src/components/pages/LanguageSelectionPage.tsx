@@ -47,10 +47,10 @@ const LanguageSelectionPage = () => {
 
       {/* Continue Button Container */}
       <div className="w-full px-4 md:px-[40px] mt-3 md:mt-auto mb-4 md:mb-8">
-        <ContinueButton onClick={() => {}} />
+        <ContinueButton onClick={() => {}} nextPage="/referral" />
       </div>
     </SurveyLayout>
   );
 };
 
-export default LanguageSelectionPage; 
+export default LanguageSelectionPage;

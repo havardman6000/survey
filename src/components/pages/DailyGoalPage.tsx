@@ -46,7 +46,7 @@ const DailyGoalPage = () => {
 
       {/* Continue Button Container */}
       <div className="w-full px-4 md:px-[40px] mt-3 md:mt-6 mb-4 md:mb-10">
-        <ContinueButton onClick={() => {}} />
+        <ContinueButton onClick={() => {}}nextPage='/success' />
       </div>
     </SurveyLayout>
   );

@@ -19,14 +19,13 @@ const WelcomePage = () => {
           />
         </div>
       </div>
-
       <div className="w-full px-4 md:px-[40px] mb-8 md:mb-14">
         <div className="max-w-[400px] md:max-w-none mx-auto">
-          <ContinueButton onClick={() => {}} />
+          <ContinueButton onClick={() => {}} nextPage="/language-selection" />
         </div>
       </div>
     </SurveyLayout>
   );
 };
 
-export default WelcomePage; 
+export default WelcomePage;
